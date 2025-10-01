@@ -2,7 +2,7 @@ import { Button } from '../ui/button';
 import { Download, FileText, Table } from 'lucide-react';
 import { Vulnerability, Company } from '../../types';
 import { jsPDF } from 'jspdf';
-import * as XLSX from 'xlsx';
+import ExcelJS from 'exceljs';
 import { format } from 'date-fns';
 import { toast } from 'sonner@2.0.3';
 
@@ -101,48 +101,57 @@ export function ExportButtons({ vulnerabilities, company }: ExportButtonsProps) 
     toast.success('PDF report generated successfully');
   };
 
-  const exportToExcel = () => {
+  const exportToExcel = async () => {
     if (vulnerabilities.length === 0) {
       toast.error('No vulnerabilities to export');
       return;
     }
 
-    const data = vulnerabilities.map((vuln) => ({
-      'Vulnerability Name': vuln.name,
-      Severity: vuln.severity,
-      'CVSS Score': vuln.cvssScore,
-      Status: vuln.status,
-      'Target URL': vuln.targetUrl,
-      Description: vuln.description,
-      Impact: vuln.impact,
-      Remediation: vuln.remediation,
-      'Discovered Date': format(vuln.discoveredDate, 'yyyy-MM-dd'),
-      'Resolved Date': vuln.resolvedDate ? format(vuln.resolvedDate, 'yyyy-MM-dd') : 'N/A',
-    }));
+    const workbook = new ExcelJS.Workbook();
+    const sheet = workbook.addWorksheet('Vulnerabilities');
 
-    const ws = XLSX.utils.json_to_sheet(data);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Vulnerabilities');
+    // Add headers
+    const headers = [
+      'Vulnerability Name', 'Severity', 'CVSS Score', 'Status', 'Target URL',
+      'Description', 'Impact', 'Remediation', 'Discovered Date', 'Resolved Date'
+    ];
+    sheet.addRow(headers);
+
+    // Add data rows
+    vulnerabilities.forEach((vuln) => {
+      sheet.addRow([
+        vuln.name,
+        vuln.severity,
+        vuln.cvssScore,
+        vuln.status,
+        vuln.targetUrl,
+        vuln.description,
+        vuln.impact,
+        vuln.remediation,
+        format(vuln.discoveredDate, 'yyyy-MM-dd'),
+        vuln.resolvedDate ? format(vuln.resolvedDate, 'yyyy-MM-dd') : 'N/A'
+      ]);
+    });
 
     // Set column widths
-    ws['!cols'] = [
-      { wch: 30 }, // Name
-      { wch: 10 }, // Severity
-      { wch: 10 }, // CVSS
-      { wch: 12 }, // Status
-      { wch: 40 }, // URL
-      { wch: 50 }, // Description
-      { wch: 50 }, // Impact
-      { wch: 50 }, // Remediation
-      { wch: 15 }, // Discovered
-      { wch: 15 }, // Resolved
+    sheet.columns = [
+      { width: 30 }, { width: 10 }, { width: 10 }, { width: 12 }, { width: 40 },
+      { width: 50 }, { width: 50 }, { width: 50 }, { width: 15 }, { width: 15 }
     ];
 
     const fileName = company
       ? `VAPT-Report-${company.name.replace(/\s+/g, '-')}-${format(new Date(), 'yyyy-MM-dd')}.xlsx`
       : `VAPT-Report-${format(new Date(), 'yyyy-MM-dd')}.xlsx`;
 
-    XLSX.writeFile(wb, fileName);
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    a.click();
+    window.URL.revokeObjectURL(url);
+    
     toast.success('Excel report generated successfully');
   };
 
