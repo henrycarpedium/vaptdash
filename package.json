@@ -1,6 +1,7 @@
 {
   "name": "dynamic-vapt-dashboard",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "dependencies": {
     "@hookform/resolvers": "^3.3.2",
