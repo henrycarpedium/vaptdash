@@ -60,7 +60,16 @@ export default function App() {
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="flex items-center gap-3 mb-8">
-            <div className="bg-primary text-primary-foreground p-3 rounded-lg">
+            <img 
+              src="/logovaptdash.png" 
+              alt="VAPT Logo" 
+              className="h-12 w-12 object-contain"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.nextElementSibling.style.display = 'flex';
+              }}
+            />
+            <div className="bg-primary text-primary-foreground p-3 rounded-lg" style={{display: 'none'}}>
               <Shield className="h-8 w-8" />
             </div>
             <h1 className="text-3xl">VAPT Dashboard</h1>
@@ -86,7 +95,16 @@ export default function App() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="bg-primary text-primary-foreground p-3 rounded-lg">
+            <img 
+              src="/logovaptdash.png" 
+              alt="VAPT Logo" 
+              className="h-12 w-12 object-contain"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.nextElementSibling.style.display = 'flex';
+              }}
+            />
+            <div className="bg-primary text-primary-foreground p-3 rounded-lg" style={{display: 'none'}}>
               <Shield className="h-8 w-8" />
             </div>
             <div>
