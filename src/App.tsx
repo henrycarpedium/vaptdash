@@ -61,10 +61,11 @@ export default function App() {
           {/* Header */}
           <div className="flex items-center gap-3 mb-8">
             <img 
-              src="/logovaptdash.png" 
+              src="/logovaptdash.png?v=1" 
               alt="VAPT Logo" 
               className="h-12 w-12 object-contain"
               onError={(e) => {
+                console.log('Logo failed to load');
                 e.currentTarget.style.display = 'none';
                 e.currentTarget.nextElementSibling.style.display = 'flex';
               }}
@@ -96,10 +97,11 @@ export default function App() {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div className="flex items-center gap-3">
             <img 
-              src="/logovaptdash.png" 
+              src="/logovaptdash.png?v=1" 
               alt="VAPT Logo" 
               className="h-12 w-12 object-contain"
               onError={(e) => {
+                console.log('Logo failed to load');
                 e.currentTarget.style.display = 'none';
                 e.currentTarget.nextElementSibling.style.display = 'flex';
               }}
