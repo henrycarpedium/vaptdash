@@ -61,7 +61,7 @@ export default function App() {
           {/* Header */}
           <div className="flex items-center gap-3 mb-8">
             <img 
-              src="public/logovaptdash-v1.png?v=1" 
+              src="public/logo.png?v=1" 
               alt="VAPT Logo" 
               className="h-12 w-12 object-contain"
               onError={(e) => {
@@ -97,7 +97,7 @@ export default function App() {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div className="flex items-center gap-3">
             <img 
-              src="public/logovaptdash-v1.png?v=1" 
+              src="public/logo.png?v=1" 
               alt="VAPT Logo" 
               className="h-12 w-12 object-contain"
               onError={(e) => {
